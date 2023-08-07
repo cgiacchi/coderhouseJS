@@ -8,7 +8,7 @@ function infoHospedaje() {
     }
     let huespedes = parseInt(prompt("Indicanos la cantidad de huespedes (mínimo 1, máximo 5)"));
 
-    if (isNaN(huespedes) || huespedes < 1 || huespedes > 5) {
+    if (huespedes < 1 || huespedes > 5) {
         alert("Lo sentimos! No contamos con apartamentos para tantos huespedes.");
         return infoHospedaje();
     }
