@@ -3,13 +3,13 @@ alert(`Bienvenido a Merlot Suites & Studios. Un lugar exclusivo donde podrás vi
 function infoHospedaje() {
     let edificio = prompt(`Dónde te gustaría hospedarte? Responde Suites o Studios`).toLowerCase();
     while(edificio !== `suites` && edificio !== `studios`) {
-        console.log(`Debes ingresar un nombre de edificio válido (Suites o Studios).`);
+        alert(`Debes ingresar un nombre de edificio válido (Suites o Studios).`);
         return infoHospedaje();
     }
     let huespedes = parseInt(prompt(`Indicanos la cantidad de huespedes (mínimo 1, máximo 5)`));
 
     if (huespedes < 1 || huespedes > 5) {
-        console.log(`Lo sentimos! No contamos con apartamentos para tantos huespedes.`);
+        alert(`Lo sentimos! No contamos con apartamentos para tantos huespedes.`);
         return infoHospedaje();
     }
     if (edificio === `suites` && huespedes >= 1 && huespedes <= 2){
