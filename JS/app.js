@@ -1,68 +1,86 @@
-alert(`Bienvenido a Merlot Suites & Studios. Un lugar exclusivo donde podrás vivir una experiencia única!`);
+alert("Bienvenido a Merlot Suites & Studios. Un lugar exclusivo donde podrás vivir una experiencia única!");
 
-function infoHospedaje() {
-    let edificio = prompt(`Dónde te gustaría hospedarte? Responde Suites o Studios`).toLowerCase();
-    while(edificio !== `suites` && edificio !== `studios`) {
-        alert(`Debes ingresar un nombre de edificio válido (Suites o Studios).`);
-        return infoHospedaje();
-    }
-    let huespedes = parseInt(prompt(`Indicanos la cantidad de huespedes (mínimo 1, máximo 5)`));
-
-    if (huespedes < 1 || huespedes > 5) {
-        alert(`Lo sentimos! No contamos con apartamentos para tantos huespedes.`);
-        return infoHospedaje();
-    }
-    if (edificio === `suites` && huespedes >= 1 && huespedes <= 2){
-      alert(`Merlot suites se encuentra en Palermo Hollywood. Ofrecemos piscina al aire libre en la terraza, servicios de conserjería y conexión wifi gratuita. Tenemos disponibles 3 tipos de apartamentos, Suite standard, Suite Superior y Suite Deluxe. Comunícate con nosotros para más información!`);
-    } else if (edificio === `suites` && huespedes >= 3 && huespedes <= 5){
-      alert(`Merlot suites se encuentra en Palermo Hollywood. Ofrecemos piscina al aire libre en la terraza, servicios de conserjería y conexión wifi gratuita. Tenemos disponibles 2 tipos de apartamentos, Suite Familiar y  Suite Duplex. Comunícate con nosotros para más información!`);
-    }else if(edificio === `studios` && huespedes >= 1 && huespedes <= 2) {
-      alert(`Merlot Studios se encuentra en Palermo Soho. Este complejo de apartamentos ofrece un jardin y piscina al aire libre, servicios de conserjería, conexión wifi gratuita y un circuito de spa. Tenemos disponibles 4 tipos de apartamentos, Studio PB con patio, Studio PB con cocina, Studio Standard y Studio Superior. Comunícate con nosotros para más información!`);
-    } else if(edificio === `studios` && huespedes >= 3 && huespedes <= 5) {
-      alert(`Merlot Studios se encuentra en Palermo Soho. Este complejo de apartamentos ofrece un jardin y piscina al aire libre, servicios de conserjería, conexión wifi gratuita y un circuito de spa. Tenemos disponible 1 tipo de apartamento, el Studio Triplex. Comunícate con nosotros para más información!`);
-    }
-}
-infoHospedaje();
-
-function tarifas() {
-    let precioSuiteStandard = 20000;
-    let precio = 0;
-    let depto = prompt(`Ingrese el tipo de departamento para conocer el precio:`).toLowerCase();
-
-    switch (depto) {
-      case `suite standard`:
-        precio = precioSuiteStandard;
-        break;
-      case `suite superior`:
-        precio = precioSuiteStandard * 1.1; 
-        break;
-      case `suite deluxe`:
-        precio = precioSuiteStandard * 1.2;
-        break;
-      case `suite familiar`:
-        precio = precioSuiteStandard * 1.3; 
-        break;
-      case `suite duplex`:
-        precio = precioSuiteStandard * 1.4; 
-        break;
-      case `studio pb con patio`:
-        precio = precioSuiteStandard* 0.6; 
-        break;
-      case `studio standard`:
-        precio = precioSuiteStandard * 0.8 ;
-        break;
-      case `studio superior`:
-        precio = precioSuiteStandard; 
-        break;
-      case `studio triplex`:
-        precio = precioSuiteStandard * 1.1; 
-        break;
-      default:
-        alert(`El tipo de departamento ingresado no es válido.`);
-        return;
-    }
-  
-    alert(`El precio para el departamento ` + depto + ` es $` + precio.toFixed(2));
+class Departamento {
+  constructor(tipo, descripcion, precio) {
+    this.tipo = tipo;
+    this.descripcion = descripcion;
+    this.precio = precio;
   }
+};
 
-tarifas();
+const edificioSuites = [
+  new Departamento("suite standard", "depto doble con cama queen", 20000),
+  new Departamento("suite superior", "depto doble con cama king", 22000),
+  new Departamento("suite deluxe", "depto doble con cama queen y living", 24000),
+  new Departamento("suite familiar", "depto cuadruple con cama king y dos individuales", 26000),
+  new Departamento("suite duplex", "depto quintuple en dos plantas con cama queen y tres individuales", 28000)
+];
+
+const edificioStudios = [
+  new Departamento("studio pb con patio", "depto con cama individual", 14000),
+  new Departamento("studio pb con cocina", "depto con cama queen en planta baja", 16000),
+  new Departamento("studio standard", "depto doble con cama king", 18000),
+  new Departamento("studio superior", "depto doble con cama queen y living", 20000),
+  new Departamento("studio triplex", "depto cuadruple en 2 pisos y terraza con cama queen y dos individuales", 22000)
+];
+
+
+const edificio = prompt("Dónde te gustaría hospedarte? Responde Suites o Studios").toLowerCase();
+if (edificio !== "suites" && edificio !== "studios") {
+  alert("Debes ingresar un nombre de edificio válido (Suites o Studios)");
+} else {
+  const fechaIngreso = parseInt(prompt("Por favor, ingresa la fecha de ingreso (formato: dd/mm/yyyy):"));
+  const fechaSalida = parseInt(prompt("Por favor, ingresa la fecha de salida (formato: dd/mm/yyyy):"));
+  const cantidadHuespedes = parseInt(prompt("Por favor, ingresa la cantidad de huéspedes:"));
+
+  if (cantidadHuespedes < 1 || cantidadHuespedes > 5) {
+    alert("Lo sentimos! No contamos con apartamentos para tantos huéspedes.");
+  } else {
+    let apartamentosDisponibles = [];
+    let cantidadDias = parseInt(calcularCantidadDias(fechaIngreso, fechaSalida));
+    console.log(parseInt(cantidadDias));
+
+    if (edificio === "suites") {
+      if (cantidadHuespedes >= 1 && cantidadHuespedes <= 2) {
+        apartamentosDisponibles = edificioSuites.slice(0, 3);
+      } else if (cantidadHuespedes >= 3 && cantidadHuespedes <= 5) {
+        apartamentosDisponibles = edificioSuites.slice(3,6);
+      }
+    } else if (edificio === "studios") {
+      if (cantidadHuespedes === 1) {
+        apartamentosDisponibles = [edificioStudios[0]];
+      } else if (cantidadHuespedes >= 2 && cantidadHuespedes <= 5) {
+        apartamentosDisponibles = edificioStudios.slice(1, 4);
+      }
+      if (cantidadHuespedes >= 3 && cantidadHuespedes <= 4) {
+        apartamentosDisponibles = [edificioStudios[4]];
+      }
+    }
+    
+
+    const apartamentosSeleccionados = apartamentosDisponibles.map(depto => `${depto.tipo}`).join("\n");
+
+    alert(`Los departamentos disponibles en Syrah ${edificio} por ${cantidadDias} días y ${cantidadHuespedes} huéspedes son:\n${apartamentosSeleccionados}`);
+
+    const deseaMasInformacion = prompt("¿Deseas más información sobre algún departamento? Responde Si o No").toLowerCase();
+
+    if (deseaMasInformacion === "si") {
+      const tipoDepartamento = prompt("Ingresa el tipo de departamento que te interesa:");
+      const departamentoSeleccionado = apartamentosDisponibles.find(depto => depto.tipo === tipoDepartamento);
+
+      if (departamentoSeleccionado) {
+        alert(`Detalles del departamento:\nTipo: ${departamentoSeleccionado.tipo}\nDescripción: ${departamentoSeleccionado.descripcion}\nPrecio: ${departamentoSeleccionado.precio}`);
+      } else {
+        alert("No se encontró información para el tipo de departamento ingresado.");
+      }
+    }
+  }
+}
+
+function calcularCantidadDias(fechaIngreso, fechaSalida) {
+  const fechaIngresoObj = new Date(fechaIngreso);
+  const fechaSalidaObj = new Date(fechaSalida);
+  const cantidadMilisegundosEnUnDia = 86400000;
+  const cantidadDias = Math.floor((fechaSalidaObj - fechaIngresoObj) / cantidadMilisegundosEnUnDia);
+  return cantidadDias;
+}
