@@ -1,6 +1,5 @@
 alert("Bienvenido a Merlot Suites & Studios. Un lugar exclusivo donde podrás vivir una experiencia única!");
 
-//CLASE Y CONSTRUCTORES - DESCRIPCION Y PRECIO DE DEPTOS
 class Departamento {
   constructor(tipo, descripcion, precio) {
     this.tipo = tipo;
@@ -8,6 +7,7 @@ class Departamento {
     this.precio = precio;
   }
 }
+
 
 const edificioSuites = [
     new Departamento("suite standard", "depto doble con cama queen", 20000),
@@ -24,52 +24,53 @@ const edificioSuites = [
     new Departamento("studio superior", "depto doble con cama queen y living", 20000),
     new Departamento("studio triplex", "depto cuadruple en 2 pisos y terraza con cama queen y dos individuales", 22000)
   ];
-
-
-// FUNCION PRINCIPAL 
 function gestionarReserva() {
   const edificio = prompt("Dónde te gustaría hospedarte? Responde Suites o Studios").toLowerCase();
+
   if (edificio !== "suites" && edificio !== "studios") {
     alert("Debes ingresar un nombre de edificio válido (Suites o Studios)");
     return gestionarReserva();
   } else {
     const fechaIngreso = new Date(prompt("Por favor, ingresa la fecha de ingreso (formato: dd/mm/yyyy):"));
     const fechaSalida = new Date(prompt("Por favor, ingresa la fecha de salida (formato: dd/mm/yyyy):"));
-    const huespedes = parseInt(prompt("Por favor, ingresa la cantidad de huéspedes:"));
-      if (huespedes < 1 || huespedes > 5) {
-        alert("Lo sentimos! No contamos con apartamentos para tantos huéspedes.");
-      } else {
-        let apartamentosDisponibles = [];
-        let cantidadDias = calcularCantidadDias(fechaIngreso, fechaSalida);
+    const cantidadHuespedes = parseInt(prompt("Por favor, ingresa la cantidad de huéspedes:"));
+
+    if (cantidadHuespedes < 1 || cantidadHuespedes > 5) {
+      alert("Lo sentimos! No contamos con apartamentos para tantos huéspedes.");
+    } else {
+      let apartamentosDisponibles = [];
+      let cantidadDias = calcularCantidadDias(fechaIngreso, fechaSalida);
+
       if (edificio === "suites") {
-        if (huespedes >= 1 && huespedes <= 2) {
+        if (cantidadHuespedes >= 1 && cantidadHuespedes <= 2) {
           apartamentosDisponibles = edificioSuites.slice(0, 3);
-        } else if (huespedes >= 3 && huespedes <= 5) {
+        } else if (cantidadHuespedes >= 3 && cantidadHuespedes <= 5) {
           apartamentosDisponibles = edificioSuites.slice(3,6);
         }
       } else if (edificio === "studios") {
-        if (huespedes === 1) {
+        if (cantidadHuespedes === 1) {
           apartamentosDisponibles = [edificioStudios[0]];
-        } else if (huespedes >= 2 && huespedes <= 5) {
+        } else if (cantidadHuespedes >= 2 && cantidadHuespedes <= 5) {
           apartamentosDisponibles = edificioStudios.slice(1, 4);
         }
-        else if (huespedes >= 3 && huespedes <= 4) {
+        if (cantidadHuespedes >= 3 && cantidadHuespedes <= 4) {
           apartamentosDisponibles = [edificioStudios[4]];
         }
       }
 
       const apartamentosSeleccionados = obtenerTiposDeApartamentos(apartamentosDisponibles).join("\n");
 
-      alert(`Los departamentos disponibles en Syrah ${edificio} por ${cantidadDias} días y ${huespedes} huéspedes son:\n${apartamentosSeleccionados}`);
+      alert(`Los departamentos disponibles en Syrah ${edificio} por ${cantidadDias} días y ${cantidadHuespedes} huéspedes son:\n${apartamentosSeleccionados}`);
 
       const deseaMasInformacion = prompt("¿Deseas más información sobre algún departamento? Responde Si o No").toLowerCase();
+
       if (deseaMasInformacion === "si") {
         obtenerInformacionDepartamento(apartamentosDisponibles);
       }
-      else {
+    else {
         alert("Muchas gracias! Cualquier otra consulta, nos puede contactar.");
+            }
         }
-      }
     }
 }
 
@@ -86,6 +87,7 @@ function obtenerTiposDeApartamentos(apartamentos) {
 function obtenerInformacionDepartamento(apartamentosDisponibles) {
   const tipoDepartamento = prompt("Ingresa el tipo de departamento que te interesa:");
   const departamentoSeleccionado = apartamentosDisponibles.find(depto => depto.tipo === tipoDepartamento);
+
   if (departamentoSeleccionado) {
     alert(`Detalles del departamento:\nTipo: ${departamentoSeleccionado.tipo}\nDescripción: ${departamentoSeleccionado.descripcion}\nPrecio: ${departamentoSeleccionado.precio}`);
   } else {
