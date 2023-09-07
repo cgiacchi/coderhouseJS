@@ -1,98 +1,98 @@
-alert("Bienvenido a Merlot Suites & Studios. Un lugar exclusivo donde podrás vivir una experiencia única!");
+//CLASES Y CONSTRUCTORES CON DESCRIPCION DE LOS DEPARTAMENTOS
 
 class Departamento {
-  constructor(tipo, descripcion, precio) {
+  constructor(tipo, descripcion, precio, cantidadHuespedes) {
     this.tipo = tipo;
     this.descripcion = descripcion;
     this.precio = precio;
+    this.cantidadHuespedes = cantidadHuespedes;
   }
 }
-
 
 const edificioSuites = [
-    new Departamento("suite standard", "depto doble con cama queen", 20000),
-    new Departamento("suite superior", "depto doble con cama king", 22000),
-    new Departamento("suite deluxe", "depto doble con cama queen y living", 24000),
-    new Departamento("suite familiar", "depto cuadruple con cama king y dos individuales", 26000),
-    new Departamento("suite duplex", "depto quintuple en dos plantas con cama queen y tres individuales", 28000)
-  ];
+  new Departamento("Suite Standard", "Depto doble con cama queen", 20000, 2),
+  new Departamento("Suite Superior", "Depto doble con cama king", 22000, 2),
+  new Departamento("Suite Deluxe", "Depto doble con cama queen y living", 24000, 2),
+  new Departamento("Suite Familiar", "Depto cuadruple con cama king y 2 individuales", 26000, 4),
+  new Departamento("Suite Duplex", "Depto quintuple en dos plantas con cama queen y 3 individuales", 28000, 5)
+];
+
+const edificioStudios = [
+  new Departamento("Studio pb con patio", "Depto con cama individual", 14000, 1),
+  new Departamento("Studio pb con cocina", "Depto con cama queen en planta baja", 16000, 2),
+  new Departamento("Studio standard", "Depto doble con cama king", 18000, 2),
+  new Departamento("Studio superior", "Depto doble con cama queen y living", 20000, 2),
+  new Departamento("Studio triplex", "Depto cuadruple en 2 pisos y terraza con cama queen y dos individuales", 22000, 4)
+];
+
+
+//FORMULARIO DE BUSQUEDA
+
+function buscarDepartamentosDisponibles() {
+  const edificioSeleccionado = document.getElementById("edificio").value;
+  const fechaIngreso = document.getElementById("fecha-ingreso").value;
+  const fechaSalida = document.getElementById("fecha-salida").value;
+  const cantidadHuespedes = parseInt(document.getElementById("huespedes").value);
   
-  const edificioStudios = [
-    new Departamento("studio pb con patio", "depto con cama individual", 14000),
-    new Departamento("studio pb con cocina", "depto con cama queen en planta baja", 16000),
-    new Departamento("studio standard", "depto doble con cama king", 18000),
-    new Departamento("studio superior", "depto doble con cama queen y living", 20000),
-    new Departamento("studio triplex", "depto cuadruple en 2 pisos y terraza con cama queen y dos individuales", 22000)
-  ];
-function gestionarReserva() {
-  const edificio = prompt("Dónde te gustaría hospedarte? Responde Suites o Studios").toLowerCase();
+  if (fechaIngreso === "" || fechaSalida === "") {
+    alert("Por favor, selecciona las fechas de ingreso y salida.");
+    return;
+  }
+  if (new Date(fechaIngreso) >= new Date(fechaSalida)) {
+    alert("La fecha de ingreso debe ser anterior a la fecha de salida.");
+    return;
+  }
 
-  if (edificio !== "suites" && edificio !== "studios") {
-    alert("Debes ingresar un nombre de edificio válido (Suites o Studios)");
-    return gestionarReserva();
-  } else {
-    const fechaIngreso = new Date(prompt("Por favor, ingresa la fecha de ingreso (formato: dd/mm/yyyy):"));
-    const fechaSalida = new Date(prompt("Por favor, ingresa la fecha de salida (formato: dd/mm/yyyy):"));
-    const cantidadHuespedes = parseInt(prompt("Por favor, ingresa la cantidad de huéspedes:"));
+  const edificio = edificioSeleccionado === "suites" ? edificioSuites : edificioStudios;
 
-    if (cantidadHuespedes < 1 || cantidadHuespedes > 5) {
-      alert("Lo sentimos! No contamos con apartamentos para tantos huéspedes.");
+  const resultados = edificio.filter(depto => {
+    if (cantidadHuespedes >= 1 && cantidadHuespedes <= 2) {
+      return depto.cantidadHuespedes >= 1 && depto.cantidadHuespedes <= 2;
+    } else if (cantidadHuespedes >= 3 && cantidadHuespedes <= 5) {
+      return depto.cantidadHuespedes >= 3 && depto.cantidadHuespedes <= 5;
     } else {
-      let apartamentosDisponibles = [];
-      let cantidadDias = calcularCantidadDias(fechaIngreso, fechaSalida);
-
-      if (edificio === "suites") {
-        if (cantidadHuespedes >= 1 && cantidadHuespedes <= 2) {
-          apartamentosDisponibles = edificioSuites.slice(0, 3);
-        } else if (cantidadHuespedes >= 3 && cantidadHuespedes <= 5) {
-          apartamentosDisponibles = edificioSuites.slice(3,6);
-        }
-      } else if (edificio === "studios") {
-        if (cantidadHuespedes === 1) {
-          apartamentosDisponibles = [edificioStudios[0]];
-        } else if (cantidadHuespedes >= 2 && cantidadHuespedes <= 5) {
-          apartamentosDisponibles = edificioStudios.slice(1, 4);
-        }
-        if (cantidadHuespedes >= 3 && cantidadHuespedes <= 4) {
-          apartamentosDisponibles = [edificioStudios[4]];
-        }
-      }
-
-      const apartamentosSeleccionados = obtenerTiposDeApartamentos(apartamentosDisponibles).join("\n");
-
-      alert(`Los departamentos disponibles en Syrah ${edificio} por ${cantidadDias} días y ${cantidadHuespedes} huéspedes son:\n${apartamentosSeleccionados}`);
-
-      const deseaMasInformacion = prompt("¿Deseas más información sobre algún departamento? Responde Si o No").toLowerCase();
-
-      if (deseaMasInformacion === "si") {
-        obtenerInformacionDepartamento(apartamentosDisponibles);
-      }
-    else {
-        alert("Muchas gracias! Cualquier otra consulta, nos puede contactar.");
-            }
-        }
+      return false;
     }
-}
+  });
+  
+  const resultadosDiv = document.getElementById("resultados");
 
-function calcularCantidadDias(fechaIngreso, fechaSalida) {
-  const cantidadMilisegundosEnUnDia = 86400000;
-  const cantidadDias = Math.floor((fechaSalida - fechaIngreso) / cantidadMilisegundosEnUnDia);
-  return cantidadDias;
-}
+  resultadosDiv.innerHTML = "";
 
-function obtenerTiposDeApartamentos(apartamentos) {
-  return apartamentos.map(depto => depto.tipo);
-}
-
-function obtenerInformacionDepartamento(apartamentosDisponibles) {
-  const tipoDepartamento = prompt("Ingresa el tipo de departamento que te interesa:");
-  const departamentoSeleccionado = apartamentosDisponibles.find(depto => depto.tipo === tipoDepartamento);
-
-  if (departamentoSeleccionado) {
-    alert(`Detalles del departamento:\nTipo: ${departamentoSeleccionado.tipo}\nDescripción: ${departamentoSeleccionado.descripcion}\nPrecio: ${departamentoSeleccionado.precio}`);
+  if (resultados.length === 0) {
+    resultadosDiv.innerHTML += "<h2>Departamentos Disponibles:</h2>";
+    resultadosDiv.innerHTML += "<p>No hay departamentos disponibles para las fechas y cantidad de huéspedes seleccionados.</p>";
   } else {
-    alert("No se encontró información para el tipo de departamento ingresado.");
+    resultadosDiv.innerHTML += "<h2>Departamentos Disponibles:</h2>";
+    resultados.map((depto, index) => {
+      resultadosDiv.innerHTML += 
+      `<div>
+          <h3>${depto.tipo}</h3>
+          <p class="estiloParrafo">${depto.descripcion}</p>
+          <p class="estiloParrafo"> Precio por noche: $${depto.precio}</p>
+          <button onclick="reservarDepartamento(${index})" class="btn btn-primary btn-reservar">Reservar Departamento</button>
+        </div>`;
+    });
   }
 }
 
-gestionarReserva();
+//JSON Y STORAGE 
+function reservarDepartamento(index) {
+  const alertReservado = document.getElementById("alert-success");
+  const alertNoReservado = document.getElementById("alert-dark");
+
+  if (index !== undefined) {
+    const departamento = edificioSuites.concat(edificioStudios)[index];
+    localStorage.setItem("departamentoSeleccionado", JSON.stringify(departamento));
+
+    const modalBody = document.getElementById("modal-success-body");
+    modalBody.innerHTML = `<p>Departamento ${departamento.tipo} reservado con éxito.</p>`;
+
+    const successModal = new bootstrap.Modal(document.getElementById("modal-success"));
+    successModal.show();
+    alertNoReservado.innerHTML = "";
+    } 
+    else {
+    alertReservado.innerHTML = ""; 
+  }
+}
