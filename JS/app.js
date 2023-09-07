@@ -96,3 +96,9 @@ function reservarDepartamento(index) {
     alertReservado.innerHTML = ""; 
   }
 }
+
+
+function limpiarLocalStorage() {
+  localStorage.clear();
+  alert("Carrito vacio");
+}

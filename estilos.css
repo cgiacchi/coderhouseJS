@@ -16,3 +16,13 @@ h1,h2,h3,h4,.estiloParrafo {
     margin-right: 5rem;
     margin-top: 3rem;
 }
+
+.btn-danger{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 200px;
+    margin-left: 36rem;
+    margin-right: 5rem;
+    margin-top: 3rem;
+}
